@@ -623,9 +623,9 @@ SlamGMapping::laserCallback(const sensor_msgs::LaserScan::ConstPtr& scan)
 
     tf::Transform laser_to_map = tf::Transform(tf::createQuaternionFromRPY(0, 0, mpose.theta), tf::Vector3(mpose.x, mpose.y, 0.0)).inverse();
     tf::Transform odom_to_laser = tf::Transform(tf::createQuaternionFromRPY(0, 0, odom_pose.theta), tf::Vector3(odom_pose.x, odom_pose.y, 0.0));
-
+// tf::Transform zero = tf::Transform(tf::createQuaternionFromRPY(0, 0, 0), tf::Vector3(0,0, 0.0));
     map_to_odom_mutex_.lock();
-    map_to_odom_ = (odom_to_laser * laser_to_map).inverse();
+    map_to_odom_ = (odom_to_laser*laser_to_map).inverse();
     map_to_odom_mutex_.unlock();
 
     if(!got_map_ || (scan->header.stamp - last_map_update) > map_update_interval_)
